@@ -132,6 +132,7 @@ import FancyButton from "../../../components/Layouts/UI/FancyButton.vue";
 import { ref, reactive } from "vue";
 import { useFormValidation } from "../../../composables/useFormValidation";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   name: "ListingForm",
   components: {
@@ -139,7 +140,7 @@ export default {
   },
   setup() {
     const store = useStore();
-
+    const router = useRouter();
     const formData = reactive({
       streetName: "", // Default value, will be set by user
       houseNumber: "",
@@ -188,6 +189,9 @@ export default {
           await store.dispatch("houses/createHouse", formDataToSend);
 
           console.log("House created successfully");
+
+          // Redirect to the listing page
+          router.push({ name: "Home" });
         } catch (error) {
           console.error("Failed to create house:", error);
           globalError.value = error.response

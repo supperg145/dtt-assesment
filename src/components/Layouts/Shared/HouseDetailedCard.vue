@@ -9,13 +9,9 @@
       >
         <img src="@/assets/slices/ic_edit@3x.png" alt="Edit" />
       </router-link>
-      <router-link
-        :to="`/house/delete/${house.id}`"
-        class="delete-button"
-        @click.stop
-      >
+      <button class="delete-button" @click.stop="showDeletePopup = true">
         <img src="@/assets/slices/ic_delete@3x.png" alt="Delete" />
-      </router-link>
+      </button>
     </div>
 
     <!-- House Image -->
@@ -70,15 +66,32 @@
       <div class="house-detailed-info">
         <p>{{ house.description }}</p>
       </div>
+
+      <!-- Delete Confirmation Popup -->
+      <DeleteConfirmationPopup
+        :isVisible="showDeletePopup"
+        @confirm="deleteListing(house.id)"
+        @cancel="showDeletePopup = false"
+      />
+
+      <!-- Delete Error -->
+      <p v-if="deleteError" class="error-message">
+        {{ deleteError }}
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import { computed } from "vue";
+import DeleteConfirmationPopup from "@/components/DeleteConfirmationPopup.vue";
+import { useDeleteListing } from "@/composables/useDeleteListing";
 
 export default {
   name: "HouseDetailedCard",
+  components: {
+    DeleteConfirmationPopup,
+  },
   props: {
     house: {
       type: Object,
@@ -92,8 +105,14 @@ export default {
         maximumFractionDigits: 0,
       });
     });
+    const { showDeletePopup, deleteError, deleteListing } = useDeleteListing();
+    return { formattedPrice, showDeletePopup, deleteListing, deleteError };
+  },
 
-    return { formattedPrice };
+  methods: {
+    handleClick() {
+      this.$emit("click", this.house.id);
+    },
   },
 };
 </script>
