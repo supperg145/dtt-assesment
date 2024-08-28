@@ -1,6 +1,7 @@
 <template>
   <div class="house-detail">
     <div v-if="house">
+      <GoBackButton />
       <HouseDetailedCard :house="house" />
     </div>
     <div v-else>
@@ -14,11 +15,13 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import HouseDetailedCard from "../components/Layouts/Shared/HouseDetailedCard.vue";
+import GoBackButton from "@/components/Layouts/UI/GoBackButton.vue";
 
 export default {
   name: "HouseDetail",
   components: {
     HouseDetailedCard,
+    GoBackButton,
   },
   setup() {
     const store = useStore();

@@ -1,11 +1,17 @@
 <template>
   <div>
+    <GoBackButton />
     <h1>Edit House</h1>
   </div>
 </template>
 
 <script>
-export default {};
+import GoBackButton from "@/components/Layouts/UI/GoBackButton.vue";
+export default {
+  components: {
+    GoBackButton,
+  },
+};
 </script>
 
 <style></style>

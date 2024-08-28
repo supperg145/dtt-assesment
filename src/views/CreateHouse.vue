@@ -1,4 +1,5 @@
 <template>
+  <GoBackButton />
   <div class="create-house">
     <div class="form-container">
       <h1>Create New Listing</h1>
@@ -9,11 +10,13 @@
 
 <script>
 import ListingForm from "@/components/Layouts/Shared/ListingForm.vue";
+import GoBackButton from "@/components/Layouts/UI/GoBackButton.vue";
 
 export default {
   name: "CreateHouse",
   components: {
     ListingForm,
+    GoBackButton,
   },
   mounted() {
     document.body.classList.add("create-house-bg");

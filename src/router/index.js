@@ -6,6 +6,8 @@ import CreateHouse from "@/views/CreateHouse.vue"; // Import CreateHouse
 import EditHouse from "@/views/EditHouse.vue"; // Import EditHouse
 import NotFound from "@/views/NotFound.vue"; // Import NotFound
 
+import store from "@/store";
+
 const routes = [
   {
     path: "/",
@@ -44,6 +46,11 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  store.dispatch("navigation/updatePreviousPath", from.fullPath);
+  next();
 });
 
 export default router;
