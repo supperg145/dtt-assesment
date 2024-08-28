@@ -45,12 +45,16 @@
       placeholder="e.g. Amsterdam"
     />
 
-    <label for="image">Upload a picture (PNG or JPG)*</label>
+    <label for="image" class="file-upload">
+      <p>Upload a picture (PNG or JPG)</p>
+      <img src="@/assets/slices/ic_upload@3x.png" alt="Upload Image" />
+    </label>
     <input
       type="file"
       id="image"
       accept="image/png, image/jpeg"
       @change="onImageChange"
+      style="display: none"
     />
 
     <label for="price">Price*</label>
@@ -128,89 +132,179 @@
 </template>
 
 <script>
+import axios from "axios";
 import FancyButton from "../../../components/Layouts/UI/FancyButton.vue";
-import { ref, reactive } from "vue";
-import { useFormValidation } from "../../../composables/useFormValidation";
-import { useStore } from "vuex";
+import { ref, reactive, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useFormValidation } from "@/composables/useFormValidation";
+
 export default {
   name: "ListingForm",
   components: {
     FancyButton,
   },
-  setup() {
-    const store = useStore();
+  props: {
+    listingData: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
     const router = useRouter();
+
+    const isEditMode = ref(false);
+
     const formData = reactive({
-      streetName: "", // Default value, will be set by user
+      streetName: "",
       houseNumber: "",
       numberAddition: "",
       zip: "",
       city: "",
-      image: null, // Image will be handled separately
-      price: "", // Start with an empty string or a default value
+      image: null,
+      price: "",
       size: "",
-      hasGarage: false, // Use Boolean for dynamic options
+      hasGarage: false,
       bedrooms: "",
       bathrooms: "",
       constructionYear: "",
-      description: "", // Start with an empty string
+      description: "",
     });
-    //Reactive state for error messages
+
+    // Watch for changes in listingData to update formData
+    watch(
+      () => props.listingData,
+      (newData) => {
+        if (newData) {
+          isEditMode.value = true;
+          formData.streetName = newData.location?.street || "";
+          formData.houseNumber = newData.location?.houseNumber || "";
+          formData.numberAddition = newData.location?.houseNumberAddition || "";
+          formData.zip = newData.location?.zip || "";
+          formData.city = newData.location?.city || "";
+          formData.price = newData.price || "";
+          formData.size = newData.size || "";
+          formData.hasGarage = newData.hasGarage || false;
+          formData.bedrooms = newData.rooms?.bedrooms || "";
+          formData.bathrooms = newData.rooms?.bathrooms || "";
+          formData.constructionYear = newData.constructionYear || "";
+          formData.description = newData.description || "";
+          console.log("Updated form data:", formData);
+        }
+      },
+      { immediate: true }
+    );
+
+    // Reactive state for error messages
     const globalError = ref(null);
 
-    //Form validation
+    // Form validation
     const isFormValid = useFormValidation(formData);
 
-    //Form submit/
-
+    // Handle form submission
     const onSubmit = async () => {
       if (isFormValid.value) {
         try {
-          console.log("Submitting form data", formData);
+          const baseUrl = "https://api.intern.d-tt.nl/api/houses";
+          let listingId = props.listingData?.id || null;
 
+          // Handle image upload if an image is provided
+          if (formData.image) {
+            const uploadHeaders = new Headers();
+            uploadHeaders.append("X-Api-Key", process.env.VUE_APP_API_KEY);
+
+            const formDataForImage = new FormData();
+            formDataForImage.append(
+              "image",
+              formData.image,
+              formData.imageName
+            );
+
+            const uploadRequestOptions = {
+              method: "POST",
+              headers: uploadHeaders,
+              body: formDataForImage,
+              redirect: "follow",
+            };
+
+            const imageUploadResponse = await fetch(
+              `${baseUrl}/${listingId || ""}/upload`,
+              uploadRequestOptions
+            );
+            const imageUploadResult = await imageUploadResponse.text();
+            console.log("Image upload result:", imageUploadResult);
+          }
+
+          // Create FormData object for the listing data
           const formDataToSend = new FormData();
-          // Append form data
           formDataToSend.append("price", formData.price);
-          formDataToSend.append("bedrooms", formData.bedrooms);
-          formDataToSend.append("bathrooms", formData.bathrooms);
-          formDataToSend.append("size", formData.size);
+          formDataToSend.append("bedrooms", parseInt(formData.bedrooms));
+          formDataToSend.append("bathrooms", parseInt(formData.bathrooms));
+          formDataToSend.append("size", parseFloat(formData.size));
           formDataToSend.append("streetName", formData.streetName);
           formDataToSend.append("houseNumber", formData.houseNumber);
           formDataToSend.append("numberAddition", formData.numberAddition);
           formDataToSend.append("zip", formData.zip);
           formDataToSend.append("city", formData.city);
-          formDataToSend.append("constructionYear", formData.constructionYear);
+          formDataToSend.append(
+            "constructionYear",
+            parseInt(formData.constructionYear)
+          );
           formDataToSend.append("hasGarage", formData.hasGarage.toString());
           formDataToSend.append("description", formData.description);
-          formDataToSend.append("image", formData.image);
 
-          // Call the Vuex action
-          await store.dispatch("houses/createHouse", formDataToSend);
+          let response;
+          if (isEditMode.value) {
+            // Update existing listing
+            response = await axios.post(
+              `${baseUrl}/${props.listingData.id}`,
+              formDataToSend,
+              {
+                headers: {
+                  "X-Api-Key": process.env.VUE_APP_API_KEY,
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+            console.log("House updated successfully");
+          } else {
+            // Create new listing
+            response = await axios.post(baseUrl, formDataToSend, {
+              headers: {
+                "X-Api-Key": process.env.VUE_APP_API_KEY,
+                "Content-Type": "multipart/form-data",
+              },
+            });
+            console.log("House created successfully");
+          }
 
-          console.log("House created successfully");
+          // Get the ID of the newly created or updated listing
+          const createdListingId = response.data.id || props.listingData?.id;
 
-          // Redirect to the listing page
-          router.push({ name: "Home" });
+          // Redirect to the newly created or updated listing page
+          if (createdListingId) {
+            router.push({ name: "House", params: { id: createdListingId } });
+          } else {
+            router.push({ name: "Home" });
+          }
         } catch (error) {
-          console.error("Failed to create house:", error);
+          console.error("Failed to create/update house:", error);
           globalError.value = error.response
-            ? `Failed to create house: ${
+            ? `Failed to create/update house: ${
                 error.response.status
               }, Details: ${JSON.stringify(error.response.data)}`
-            : `Failed to create house: ${error.message}`;
+            : `Failed to create/update house: ${error.message}`;
         }
       } else {
         globalError.value = "Please fill in all required fields.";
       }
     };
-    //Picture input
 
+    // Handle image file selection
     const onImageChange = (event) => {
       const file = event.target.files[0];
       if (file) {
-        console.log("Selected file:", file); // Debugging statement
         formData.image = file;
+        formData.imageName = file.name; // Store the image name
       }
     };
 
@@ -262,8 +356,14 @@ select {
   background-repeat: no-repeat;
 }
 
-.picture-input-container {
-  margin-bottom: 16px;
+.file-upload {
+  p {
+    margin-bottom: 8px;
+  }
+  img {
+    border: dashed 2px $color-secondary;
+    padding: 10px;
+  }
 }
 
 .form-grid {

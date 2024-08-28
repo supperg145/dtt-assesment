@@ -64,12 +64,13 @@ export default {
 
   async updateHouse({ commit }, house) {
     try {
-      const response = await axios.put(`${baseUrl}/${house.id}`, house, {
+      const response = await axios.post(`${baseUrl}/${house.id}`, house, {
         headers: {
           "X-Api-Key": apiKey,
         },
       });
       commit("updateHouse", response.data);
+      console.log("House updated successfully:", response.data);
     } catch (error) {
       console.error("Error updating house:", error);
     }

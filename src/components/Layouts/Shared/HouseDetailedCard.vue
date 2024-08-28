@@ -1,19 +1,5 @@
 <template>
   <div class="house-detailed-card">
-    <!-- Action Buttons -->
-    <div v-if="house.madeByMe" class="action-buttons">
-      <router-link
-        :to="`/house/edit/${house.id}`"
-        class="edit-button"
-        @click.stop
-      >
-        <img src="@/assets/slices/ic_edit@3x.png" alt="Edit" />
-      </router-link>
-      <button class="delete-button" @click.stop="showDeletePopup = true">
-        <img src="@/assets/slices/ic_delete@3x.png" alt="Delete" />
-      </button>
-    </div>
-
     <!-- House Image -->
     <div class="houseimage">
       <img :src="house.image" alt="House image" />
@@ -21,8 +7,22 @@
 
     <!-- House Info -->
     <div class="houseinfo">
-      <h2>{{ house.location.street }} {{ house.location.houseNumber }}</h2>
-
+      <!-- Action Buttons -->
+      <div v-if="house.madeByMe" class="houseinfoheader">
+        <h2>{{ house.location.street }} {{ house.location.houseNumber }}</h2>
+        <div class="action-buttons">
+          <router-link
+            :to="`/house/edit/${house.id}`"
+            class="edit-button"
+            @click.stop
+          >
+            <img src="@/assets/slices/ic_edit@3x.png" alt="Edit" />
+          </router-link>
+          <button class="delete-button" @click.stop="showDeletePopup = true">
+            <img src="@/assets/slices/ic_delete@3x.png" alt="Delete" />
+          </button>
+        </div>
+      </div>
       <!-- Location -->
       <div class="location detail-item">
         <img src="@/assets/slices/ic_location@3x.png" alt="Location" />
@@ -227,13 +227,24 @@ export default {
       }
     }
   }
-
-  .action-buttons {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+  .houseinfoheader {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    .address {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
     gap: 8px;
 
     .edit-button,

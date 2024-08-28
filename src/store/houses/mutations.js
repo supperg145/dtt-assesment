@@ -6,9 +6,11 @@ export default {
   setHouse(state, house) {
     state.house = house;
   },
+
   addHouse(state, house) {
     state.houses.push(house);
   },
+
   updateHouse(state, updatedHouse) {
     const index = state.houses.findIndex(
       (house) => house.id === updatedHouse.id
@@ -17,6 +19,7 @@ export default {
       state.houses.splice(index, 1, updatedHouse);
     }
   },
+
   deleteHouse(state, id) {
     state.houses = state.houses.filter((house) => house.id !== id);
   },
