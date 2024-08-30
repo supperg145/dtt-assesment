@@ -97,7 +97,7 @@ export default {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  height: auto; // Allow height to adjust based on content
+  height: 200px; // Allow height to adjust based on content
   cursor: pointer;
   position: relative;
 
@@ -110,7 +110,7 @@ export default {
 
     img {
       width: 100%;
-      height: 100%;
+      height: auto;
       object-fit: cover;
     }
   }
@@ -145,7 +145,7 @@ export default {
   .houseinfo {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
     height: 100%;
     color: $text-color-secondary;
 
@@ -182,71 +182,27 @@ export default {
   }
 }
 
-// Media query for tablets and smaller desktops
-@media (max-width: 768px) {
-  .house-card {
-    flex-direction: column; // Stack elements vertically on smaller tablets
-    padding: 20px;
-    margin-bottom: 12px;
-    gap: 12px;
-
-    .houseimage {
-      width: 100%;
-      height: 150px; // Adjust height for smaller tablets
-    }
-
-    .action-buttons {
-      top: 6px;
-      right: 6px;
-
-      .edit-button,
-      .delete-button {
-        width: 22px; // Adjusted size for smaller tablets
-        height: 22px;
-      }
-
-      img {
-        width: 18px;
-        height: 18px;
-      }
-    }
-
-    .houseinfo {
-      h2 {
-        font-size: 20px; // Adjust font size for smaller tablets
-      }
-
-      .house-details {
-        gap: 6px; // Adjusted gap for smaller tablets
-      }
-
-      .detail-item {
-        span {
-          font-size: 12px; // Adjusted font size for smaller tablets
-        }
-      }
-    }
-  }
-}
-
 // Media query for phones
 @media (max-width: 480px) {
   .house-card {
     padding: 16px;
     margin-bottom: 8px;
     gap: 8px;
+    height: 150px;
 
     .houseimage {
-      height: 120px; // Further adjust image height for phones
+      height: 100%;
+      width: 40%;
     }
 
     .action-buttons {
+      padding: 10px;
       top: 4px;
       right: 4px;
 
       .edit-button,
       .delete-button {
-        width: 20px; // Further reduced size for phones
+        width: 20px;
         height: 20px;
       }
 

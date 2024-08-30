@@ -86,4 +86,13 @@ export default {
     transform: translateX(100%);
   }
 }
+@media (max-width: 480px) {
+  .toggle-switch {
+    width: 100%;
+
+    label {
+      width: 100%;
+    }
+  }
+}
 </style>

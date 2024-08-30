@@ -131,4 +131,26 @@ export default {
   font-size: 18px;
   font-weight: bold;
 }
+
+@media (max-width: 480px) {
+  .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 16px;
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+
+      .input-container {
+        width: 100%;
+      }
+    }
+  }
+}
 </style>

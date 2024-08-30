@@ -5,7 +5,14 @@
     :disabled="disabled"
     :type="buttonType"
   >
-    <slot></slot>
+    <span class="button-content">
+      <img
+        v-if="isMobile"
+        src="@/assets/slices/ic_plus_grey@3x.png"
+        alt="Create"
+      />
+      <p v-else><slot></slot></p>
+    </span>
   </button>
 </template>
 
@@ -34,26 +41,39 @@ export default {
       default: "button",
     },
   },
+  data() {
+    return {
+      isMobile: window.innerWidth <= 480,
+    };
+  },
   computed: {
     buttonClass() {
       return {
         "button-primary": this.type === "primary",
         "button-secondary": this.type === "secondary",
         "button-disabled": this.disabled,
+        "button-mobile": this.isMobile,
       };
     },
   },
   methods: {
     handleClick(event) {
       if (this.to) {
-        // Handle navigation if `to` prop is provided
         this.$router.push(this.to);
       }
       if (this.onClick) {
-        // Call the custom click handler if provided
         this.onClick(event);
       }
     },
+    handleResize() {
+      this.isMobile = window.innerWidth <= 480;
+    },
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   },
 };
 </script>
@@ -61,9 +81,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/_variables.scss";
 
-// Base button styling
 button {
-  background-color: $color-primary;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -95,6 +113,28 @@ button {
 
   &.button-disabled {
     opacity: 0.6;
+  }
+
+  .button-content {
+    display: flex;
+    align-items: center;
+  }
+
+  // Media query for mobile view
+  &.button-mobile {
+    background-color: transparent; // Remove background color on mobile
+
+    .button-content {
+      justify-content: center;
+      img {
+        display: block;
+        width: 20px; // Adjust size as needed
+        height: 20px;
+      }
+      p {
+        display: none; // Hide text on mobile
+      }
+    }
   }
 }
 </style>

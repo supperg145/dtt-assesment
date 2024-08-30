@@ -77,11 +77,17 @@ export default {
   }
 
   #search {
-    left: 10px; // Position the search icon on the left
+    left: 10px;
   }
 
   #clear {
-    right: 10px; // Position the clear icon on the right
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-wrapper {
+    width: 100%;
   }
 }
 </style>

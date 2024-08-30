@@ -2,15 +2,16 @@
   <div class="house-detailed-card">
     <!-- House Image -->
     <div class="houseimage">
+      <PhoneNavBar class="phone-navbar" :isMobile="isMobile" :house="house" />
       <img :src="house.image" alt="House image" />
     </div>
 
     <!-- House Info -->
     <div class="houseinfo">
       <!-- Action Buttons -->
-      <div v-if="house.madeByMe" class="houseinfoheader">
+      <div class="houseinfoheader">
         <h2>{{ house.location.street }} {{ house.location.houseNumber }}</h2>
-        <div class="action-buttons">
+        <div class="action-buttons" v-if="!isMobile && house.madeByMe">
           <router-link
             :to="`/house/edit/${house.id}`"
             class="edit-button"
@@ -83,14 +84,18 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import DeleteConfirmationPopup from "@/components/DeleteConfirmationPopup.vue";
 import { useDeleteListing } from "@/composables/useDeleteListing";
+//import GoBackButton from "../UI/GoBackButton.vue";
+import PhoneNavBar from "../Shared/PhoneNavBar.vue";
 
 export default {
   name: "HouseDetailedCard",
   components: {
     DeleteConfirmationPopup,
+    //GoBackButton,
+    PhoneNavBar,
   },
   props: {
     house: {
@@ -99,6 +104,7 @@ export default {
     },
   },
   setup(props) {
+    const isMobile = ref(false);
     const formattedPrice = computed(() => {
       return props.house.price.toLocaleString("en-US", {
         minimumFractionDigits: 0,
@@ -106,13 +112,36 @@ export default {
       });
     });
     const { showDeletePopup, deleteError, deleteListing } = useDeleteListing();
-    return { formattedPrice, showDeletePopup, deleteListing, deleteError };
+    return {
+      formattedPrice,
+      showDeletePopup,
+      deleteListing,
+      deleteError,
+      isMobile,
+    };
   },
 
   methods: {
     handleClick() {
       this.$emit("click", this.house.id);
     },
+
+    handleResize() {
+      if (window.innerWidth < 480) {
+        this.isMobile = true;
+      } else {
+        this.isMobile = false;
+      }
+    },
+  },
+
+  mounted() {
+    this.handleResize();
+    window.addEventListener("resize", this.handleResize);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   },
 };
 </script>
@@ -262,6 +291,49 @@ export default {
     img {
       width: 20px;
       height: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    background-color: transparent;
+
+    .houseinfo {
+      padding: 16px;
+      background-color: $color-background-2;
+      z-index: 100;
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .house-summary,
+      .house-details {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .detail-item {
+        width: 100%;
+      }
+
+      .house-summary {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .house-details {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+
+    .phone-navbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <button @click="goBack">
     <span class="back-icon"></span>
-    {{ buttonText }}
+    <div v-if="!isMobile">{{ buttonText }}</div>
   </button>
 </template>
 
@@ -11,6 +11,12 @@ import { useRouter, useRoute } from "vue-router";
 
 export default {
   name: "GoBackButton",
+  props: {
+    isMobile: {
+      type: Boolean,
+      required: true,
+    },
+  },
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -22,11 +28,11 @@ export default {
         case "About":
           return "Back to About";
         case "House":
-          return "Back to House";
+          return "Back to Home";
         case "Create":
-          return "Back to Create";
+          return "Back to Home";
         case "Edit":
-          return "Back to Edit";
+          return "Back to Listing";
         default:
           return "Go Back";
       }
@@ -61,8 +67,11 @@ button {
     display: inline-block;
   }
 
-  &:hover .back-icon {
-    background-image: url("../../../assets/slices/ic_back_white@3x.png");
+  @media (max-width: 480px) {
+    .back-icon {
+      background-image: url("../../../assets/slices/ic_back_white@3x.png");
+      background-size: cover;
+    }
   }
 }
 </style>
