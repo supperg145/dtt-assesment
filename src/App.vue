@@ -10,6 +10,7 @@
 import NavBar from "./components/NavBar.vue";
 import Container from "./components/Layouts/AppContainer.vue";
 import PhoneFooter from "./components/Layouts/Shared/PhoneFooter.vue";
+import { useMobileDetection } from "./composables/useMobileDetection";
 
 export default {
   name: "App",
@@ -18,21 +19,9 @@ export default {
     Container,
     PhoneFooter,
   },
-  data() {
-    return {
-      isMobile: window.innerWidth <= 480,
-    };
-  },
-  methods: {
-    handleResize() {
-      this.isMobile = window.innerWidth <= 480;
-    },
-  },
-  mounted() {
-    window.addEventListener("resize", this.handleResize);
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
+  setup() {
+    const { isMobile } = useMobileDetection();
+    return { isMobile };
   },
 };
 </script>

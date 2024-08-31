@@ -1,19 +1,31 @@
 import { computed } from "vue";
 
 export function useFormValidation(formData) {
-  return computed(() => {
-    return (
-      formData.streetName &&
-      formData.houseNumber &&
-      formData.zip &&
-      formData.city &&
-      formData.price &&
-      formData.size &&
-      formData.hasGarage !== undefined &&
-      formData.bedrooms &&
-      formData.bathrooms &&
-      formData.constructionYear &&
-      formData.description
+  // Define required fields
+  const requiredFields = [
+    "streetName",
+    "houseNumber",
+    "zip",
+    "city",
+    "price",
+    "size",
+    "bedrooms",
+    "bathrooms",
+    "constructionYear",
+    "description",
+  ];
+
+  const isFormValid = computed(() => {
+    // Check if all required fields are filled
+    return requiredFields.every(
+      (field) =>
+        formData[field] !== "" &&
+        formData[field] !== null &&
+        formData[field] !== undefined
     );
   });
+
+  return {
+    isFormValid,
+  };
 }

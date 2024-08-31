@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GoBackButton />
+    <GoBackButton :isMobile="isMobile" />
     <div class="edit-house">
       <div class="form-container">
         <h1>Edit House</h1>

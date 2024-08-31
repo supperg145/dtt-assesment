@@ -19,12 +19,13 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import HouseDetailedCard from "../components/Layouts/Shared/HouseDetailedCard.vue";
 import GoBackButton from "@/components/Layouts/UI/GoBackButton.vue";
 import DeleteConfirmationPopup from "@/components/DeleteConfirmationPopup.vue";
+import { useMobileDetection } from "@/composables/useMobileDetection";
 
 export default {
   name: "HouseDetail",
@@ -37,9 +38,10 @@ export default {
     const store = useStore();
     const route = useRoute();
     const house = ref(null);
-    const isMobile = ref(window.innerWidth <= 480);
     const showDeletePopup = ref(false);
     const deleteError = ref(null);
+
+    const { isMobile } = useMobileDetection();
 
     const fetchHouseDetails = async (id) => {
       try {
@@ -50,14 +52,10 @@ export default {
       }
     };
 
-    const handleResize = () => {
-      isMobile.value = window.innerWidth <= 480;
-    };
-
     const deleteListing = async (id) => {
       try {
         await store.dispatch("houses/deleteHouse", id);
-        house.value = null; // Optionally clear house details after deletion
+        house.value = null;
         showDeletePopup.value = false;
       } catch (err) {
         deleteError.value = "Failed to delete the house.";
@@ -68,11 +66,6 @@ export default {
     onMounted(() => {
       const houseId = route.params.id;
       fetchHouseDetails(houseId);
-      window.addEventListener("resize", handleResize);
-    });
-
-    onUnmounted(() => {
-      window.removeEventListener("resize", handleResize);
     });
 
     return {

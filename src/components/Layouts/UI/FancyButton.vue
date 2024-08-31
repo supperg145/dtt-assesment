@@ -7,7 +7,7 @@
   >
     <span class="button-content">
       <img
-        v-if="isMobile"
+        v-if="isMobile && isCreateButton"
         src="@/assets/slices/ic_plus_grey@3x.png"
         alt="Create"
       />
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { useMobileDetection } from "@/composables/useMobileDetection";
+
 export default {
   name: "FancyButton",
   props: {
@@ -40,10 +42,26 @@ export default {
       type: String,
       default: "button",
     },
+    isCreateButton: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
+  setup(props) {
+    const { isMobile } = useMobileDetection();
+
+    const handleClick = (event) => {
+      if (props.to) {
+        this.$router.push(props.to);
+      }
+      if (props.onClick) {
+        props.onClick(event);
+      }
+    };
+
     return {
-      isMobile: window.innerWidth <= 480,
+      isMobile,
+      handleClick,
     };
   },
   computed: {
@@ -53,27 +71,9 @@ export default {
         "button-secondary": this.type === "secondary",
         "button-disabled": this.disabled,
         "button-mobile": this.isMobile,
+        "is-create-button": this.isCreateButton,
       };
     },
-  },
-  methods: {
-    handleClick(event) {
-      if (this.to) {
-        this.$router.push(this.to);
-      }
-      if (this.onClick) {
-        this.onClick(event);
-      }
-    },
-    handleResize() {
-      this.isMobile = window.innerWidth <= 480;
-    },
-  },
-  mounted() {
-    window.addEventListener("resize", this.handleResize);
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
   },
 };
 </script>
@@ -122,17 +122,15 @@ button {
 
   // Media query for mobile view
   &.button-mobile {
-    background-color: transparent; // Remove background color on mobile
-
+    &.is-create-button {
+      background-color: transparent;
+    }
     .button-content {
       justify-content: center;
       img {
         display: block;
         width: 20px; // Adjust size as needed
         height: 20px;
-      }
-      p {
-        display: none; // Hide text on mobile
       }
     }
   }

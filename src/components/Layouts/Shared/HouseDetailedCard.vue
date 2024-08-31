@@ -126,7 +126,7 @@ export default {
       z-index: 100;
       margin-top: -70px;
       border-top-left-radius: 30px;
-      border-top-right-radius: 30px;
+      border-top-right-radius: 0px;
     }
   }
 }

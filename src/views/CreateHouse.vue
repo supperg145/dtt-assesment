@@ -1,6 +1,6 @@
 <template>
-  <GoBackButton />
   <div class="create-house">
+    <GoBackButton />
     <div class="form-container">
       <h1>Create New Listing</h1>
       <ListingForm />
@@ -30,12 +30,12 @@ export default {
 <style lang="scss" scoped>
 .create-house {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
   box-sizing: border-box;
 
   .form-container {
-    padding: 20px;
     max-width: 600px;
     width: 100%;
   }

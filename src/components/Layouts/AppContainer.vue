@@ -20,10 +20,11 @@ export default {
   background-color: var(--color-background-1);
   border-radius: 8px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     display: flex;
     flex-direction: column;
     padding: 0 15px;
+    margin-bottom: 50px;
   }
 }
 </style>

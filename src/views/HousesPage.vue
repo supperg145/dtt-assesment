@@ -2,7 +2,9 @@
   <div>
     <div class="pageheader">
       <h1>Houses</h1>
-      <FancyButton to="/create" class="fancy-button">+ CREATE NEW</FancyButton>
+      <FancyButton to="/create" class="fancy-button" :isCreateButton="true"
+        >+ CREATE NEW</FancyButton
+      >
     </div>
 
     <HouseList />
