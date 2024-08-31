@@ -108,7 +108,9 @@
 </template>
 
 <script>
-import axios from "axios";
+import { ref, reactive, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useFormValidation } from "@/composables/useFormValidation";
 import FancyButton from "../../../components/Layouts/UI/FancyButton.vue";
 import TextInput from "./Listing/TextInput.vue";
 import NumberInput from "./Listing/NumberInput.vue";
@@ -116,9 +118,11 @@ import FileUpload from "./Listing/FileUpload.vue";
 import SelectInput from "./Listing/SelectInput.vue";
 import TextArea from "./Listing/TextArea.vue";
 import ErrorDisplay from "./Listing/ErrorDisplay.vue";
-import { ref, reactive, watch } from "vue";
-import { useRouter } from "vue-router";
-import { useFormValidation } from "@/composables/useFormValidation";
+import {
+  createListing,
+  updateListing,
+  uploadImage,
+} from "@/services/apiService";
 
 export default {
   name: "ListingForm",
@@ -157,111 +161,66 @@ export default {
       description: "",
     });
 
-    // Watch for changes in listingData to update formData
     watch(
       () => props.listingData,
       (newData) => {
         if (newData && newData.id) {
           isEditMode.value = true;
-          formData.streetName = newData.location?.street || "";
-          formData.houseNumber = newData.location?.houseNumber || "";
-          formData.numberAddition = newData.location?.houseNumberAddition || "";
-          formData.zip = newData.location?.zip || "";
-          formData.city = newData.location?.city || "";
-          formData.price = newData.price || "";
-          formData.size = newData.size || "";
-          formData.hasGarage = newData.hasGarage || false;
-          formData.bedrooms = newData.rooms?.bedrooms || "";
-          formData.bathrooms = newData.rooms?.bathrooms || "";
-          formData.constructionYear = newData.constructionYear || "";
-          formData.description = newData.description || "";
+          Object.assign(formData, {
+            streetName: newData.location?.street || "",
+            houseNumber: newData.location?.houseNumber || "",
+            numberAddition: newData.location?.houseNumberAddition || "",
+            zip: newData.location?.zip || "",
+            city: newData.location?.city || "",
+            price: newData.price || "",
+            size: newData.size || "",
+            hasGarage: newData.hasGarage || false,
+            bedrooms: newData.rooms?.bedrooms || "",
+            bathrooms: newData.rooms?.bathrooms || "",
+            constructionYear: newData.constructionYear || "",
+            description: newData.description || "",
+          });
         }
       },
       { immediate: true }
     );
 
-    // Reactive state for error messages
     const globalError = ref(null);
-
-    // Form validation
     const { isFormValid } = useFormValidation(formData);
+    const apiKey = process.env.VUE_APP_API_KEY;
 
-    // Handle form submission
     const onSubmit = async () => {
       if (isFormValid.value) {
         try {
-          const baseUrl = "https://api.intern.d-tt.nl/api/houses";
-
-          // Create FormData object for the listing data
-          const formDataToSend = new FormData();
-          formDataToSend.append("price", formData.price);
-          formDataToSend.append("bedrooms", parseInt(formData.bedrooms));
-          formDataToSend.append("bathrooms", parseInt(formData.bathrooms));
-          formDataToSend.append("size", parseFloat(formData.size));
-          formDataToSend.append("streetName", formData.streetName);
-          formDataToSend.append("houseNumber", formData.houseNumber);
-          formDataToSend.append("numberAddition", formData.numberAddition);
-          formDataToSend.append("zip", formData.zip);
-          formDataToSend.append("city", formData.city);
-          formDataToSend.append(
-            "constructionYear",
-            parseInt(formData.constructionYear)
-          );
-          formDataToSend.append("hasGarage", formData.hasGarage.toString());
-          formDataToSend.append("description", formData.description);
-
           let response;
+          const formDataToSend = new FormData();
+          Object.keys(formData).forEach((key) =>
+            formDataToSend.append(key, formData[key])
+          );
+
           if (isEditMode.value) {
-            response = await axios.post(
-              `${baseUrl}/${props.listingData.id}`,
+            response = await updateListing(
+              props.listingData.id,
               formDataToSend,
-              {
-                headers: {
-                  "X-Api-Key": process.env.VUE_APP_API_KEY,
-                  "Content-Type": "multipart/form-data",
-                },
-              }
+              apiKey
             );
           } else {
-            response = await axios.post(baseUrl, formDataToSend, {
-              headers: {
-                "X-Api-Key": process.env.VUE_APP_API_KEY,
-                "Content-Type": "multipart/form-data",
-              },
-            });
+            response = await createListing(formDataToSend, apiKey);
           }
 
           const createdListingId = response.data.id || props.listingData?.id;
 
           if (createdListingId) {
-            // Upload image only if there is a valid listing ID
             if (formData.image) {
-              const uploadHeaders = new Headers();
-              uploadHeaders.append("X-Api-Key", process.env.VUE_APP_API_KEY);
-
-              const formDataForImage = new FormData();
-              formDataForImage.append(
-                "image",
+              const imageUploadResponse = await uploadImage(
+                createdListingId,
                 formData.image,
-                formData.imageName
-              );
-
-              const uploadRequestOptions = {
-                method: "POST",
-                headers: uploadHeaders,
-                body: formDataForImage,
-                redirect: "follow",
-              };
-
-              const imageUploadResponse = await fetch(
-                `${baseUrl}/${createdListingId}/upload`,
-                uploadRequestOptions
+                apiKey
               );
               if (!imageUploadResponse.ok) {
                 throw new Error("Image upload failed");
               }
             }
-
             router.push({ name: "House", params: { id: createdListingId } });
           } else {
             router.push({ name: "Home" });
@@ -279,10 +238,8 @@ export default {
       }
     };
 
-    // Handle image file selection
     const onImageChange = (file) => {
       formData.image = file;
-      formData.imageName = file.name;
     };
 
     return {
