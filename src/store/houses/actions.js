@@ -33,49 +33,6 @@ export default {
     }
   },
 
-  async createHouse({ commit }, houseFormData) {
-    try {
-      // Log the data being sent for debugging
-      console.log("Sending form-data to server:", houseFormData);
-
-      const response = await axios.post(baseUrl, houseFormData, {
-        headers: {
-          "X-Api-Key": apiKey,
-        },
-      });
-
-      // Log response data
-      console.log("Response data:", response.data);
-      commit("addHouse", response.data);
-      console.log("House created successfully:", response.data);
-    } catch (error) {
-      console.error("Error creating house:", error.message);
-      if (error.response) {
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
-      } else if (error.request) {
-        console.error("Request data:", error.request);
-      } else {
-        console.error("Error message:", error.message);
-      }
-    }
-  },
-
-  async updateHouse({ commit }, house) {
-    try {
-      const response = await axios.post(`${baseUrl}/${house.id}`, house, {
-        headers: {
-          "X-Api-Key": apiKey,
-        },
-      });
-      commit("updateHouse", response.data);
-      console.log("House updated successfully:", response.data);
-    } catch (error) {
-      console.error("Error updating house:", error);
-    }
-  },
-
   async deleteHouse({ commit }, id) {
     try {
       await axios.delete(`${baseUrl}/${id}`, {

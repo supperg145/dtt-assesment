@@ -18,6 +18,7 @@
 
 <script>
 import { useMobileDetection } from "@/composables/useMobileDetection";
+import { useRouter } from "vue-router";
 
 export default {
   name: "FancyButton",
@@ -49,10 +50,11 @@ export default {
   },
   setup(props) {
     const { isMobile } = useMobileDetection();
+    const router = useRouter();
 
     const handleClick = (event) => {
       if (props.to) {
-        this.$router.push(props.to);
+        router.push(props.to);
       }
       if (props.onClick) {
         props.onClick(event);
