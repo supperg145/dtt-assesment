@@ -11,7 +11,7 @@
         >
           <img src="@/assets/slices/ic_edit_white@3x.png" alt="Edit" />
         </router-link>
-        <button class="delete-button" @click.stop="showDeletePopup = true">
+        <button class="delete-button" @click="$emit('triggerDelete')">
           <img src="@/assets/slices/ic_delete_white@3x.png" alt="Delete" />
         </button>
       </div>
