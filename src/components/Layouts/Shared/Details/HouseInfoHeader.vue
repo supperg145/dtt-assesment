@@ -50,7 +50,7 @@ export default {
 .action-buttons {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end; // Changed from 'right' to 'flex-end'
+  justify-content: flex-end;
   gap: 8px;
 
   .edit-button,

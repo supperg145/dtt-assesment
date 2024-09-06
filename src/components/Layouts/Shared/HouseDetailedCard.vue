@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import HouseImage from "./Details/HouseImage.vue";
 import HouseInfoHeader from "./Details/HouseInfoHeader.vue";
 import LocationInfo from "./Details/LocationInfo.vue";
@@ -38,6 +38,7 @@ import HouseDetails from "./Details/HouseDetails.vue";
 import HouseDescription from "./Details/HouseDescription.vue";
 import DeleteConfirmationPopup from "@/components/DeleteConfirmationPopup.vue";
 import { useDeleteListing } from "@/composables/useDeleteListing";
+import { useMobileDetection } from "@/composables/useMobileDetection";
 
 export default {
   name: "HouseDetailedCard",
@@ -57,14 +58,17 @@ export default {
     },
   },
   setup(props) {
-    const isMobile = ref(false);
+    const { isMobile } = useMobileDetection(); // Use the mobile detection composable
+
     const formattedPrice = computed(() => {
       return props.house.price.toLocaleString("en-US", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       });
     });
+
     const { showDeletePopup, deleteError, deleteListing } = useDeleteListing();
+
     return {
       formattedPrice,
       showDeletePopup,
@@ -72,25 +76,6 @@ export default {
       deleteError,
       isMobile,
     };
-  },
-
-  mounted() {
-    this.handleResize();
-    window.addEventListener("resize", this.handleResize);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  },
-
-  methods: {
-    handleResize() {
-      if (window.innerWidth < 480) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-    },
   },
 };
 </script>

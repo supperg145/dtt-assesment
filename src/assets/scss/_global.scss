@@ -49,7 +49,7 @@ h1 {
   font-family: $font-family-montserrat;
   font-weight: $font-weight-bold;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-header1-mobile;
   }
 }
@@ -59,7 +59,7 @@ h2 {
   font-family: $font-family-montserrat;
   font-weight: $font-weight-bold;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-header2-mobile;
   }
 }
@@ -70,7 +70,7 @@ button, .tabs {
   font-weight: $font-weight-bold;
   font-size: $font-size-buttons-tabs-desktop;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-buttons-tabs-mobile;
   }
 }
@@ -80,7 +80,7 @@ input, .input-field-title {
   font-family: $font-family-open-sans;
   font-size: $font-size-input-field-desktop;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-input-field-mobile;
   }
 }
@@ -91,7 +91,7 @@ input, .input-field-title {
   font-weight: $font-weight-regular;
   font-size: $font-size-error-message-desktop;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-error-message-mobile;
   }
 }
@@ -102,7 +102,7 @@ input, .input-field-title {
   font-weight: $font-weight-semibold;
   font-size: $font-size-listing-info-desktop;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-listing-info-mobile;
   }
 }
@@ -113,7 +113,7 @@ input, .input-field-title {
   font-weight: $font-weight-medium;
   font-size: $font-size-empty-state-message-desktop;
   
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     font-size: $font-size-empty-state-message-mobile;
   }
 }

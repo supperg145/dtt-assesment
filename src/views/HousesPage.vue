@@ -31,7 +31,7 @@ export default {
   margin: 20px 0;
 
   h1 {
-    margin: 0; // Remove default margin for consistency
+    margin: 0;
   }
 }
 

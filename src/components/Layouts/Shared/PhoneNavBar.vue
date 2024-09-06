@@ -49,9 +49,6 @@ export default {
   z-index: 100;
   padding: 0 10px;
 
-  .go-back-button {
-  }
-
   .action-buttons {
     display: flex;
     flex-direction: row;

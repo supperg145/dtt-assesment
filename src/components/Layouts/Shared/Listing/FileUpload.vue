@@ -49,7 +49,7 @@ export default {
 .file-upload {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 
   p {
     margin-bottom: 8px;

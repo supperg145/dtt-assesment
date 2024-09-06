@@ -48,5 +48,10 @@ export default {
       font-size: 16px;
     }
   }
+  @media (max-width: 480px) {
+    .house-details {
+      flex-direction: row;
+    }
+  }
 }
 </style>
