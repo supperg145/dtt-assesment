@@ -28,7 +28,7 @@
 
 <script>
 import { computed, ref, onMounted } from "vue";
-import { useStore } from "vuex";
+import { useHousesStore } from "@/stores/housesStore";
 import { useRouter } from "vue-router";
 import HouseCard from "./HouseCard.vue";
 import ToggleButton from "./ToggleButton.vue";
@@ -44,16 +44,15 @@ export default {
     NoResults,
   },
   setup() {
-    const store = useStore();
+    const housesStore = useHousesStore(); // Use the Pinia store
     const router = useRouter();
-    const houses = computed(() => store.getters["houses/getHouses"]);
     const loading = ref(true);
     const error = ref(null);
     const filter = ref("price");
     const searchQuery = ref("");
 
     const filteredHouses = computed(() => {
-      let filtered = houses.value;
+      let filtered = housesStore.houses; // Access houses from Pinia store
 
       // Apply search filter
       if (searchQuery.value) {
@@ -96,7 +95,7 @@ export default {
 
     onMounted(async () => {
       try {
-        await store.dispatch("houses/fetchHouses");
+        await housesStore.fetchHouses(); // Call the action to fetch houses
       } catch (err) {
         error.value = err;
       } finally {

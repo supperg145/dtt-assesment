@@ -21,7 +21,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useHousesStore } from "@/stores/housesStore"; // Import Pinia store
 import HouseDetailedCard from "../components/Layouts/Shared/HouseDetailedCard.vue";
 import GoBackButton from "@/components/Layouts/UI/GoBackButton.vue";
 import DeleteConfirmationPopup from "@/components/DeleteConfirmationPopup.vue";
@@ -35,18 +35,17 @@ export default {
     DeleteConfirmationPopup,
   },
   setup() {
-    const store = useStore();
+    const housesStore = useHousesStore(); // Use Pinia store
     const route = useRoute();
     const house = ref(null);
     const showDeletePopup = ref(false);
     const deleteError = ref(null);
-
     const { isMobile } = useMobileDetection();
 
     const fetchHouseDetails = async (id) => {
       try {
-        const houseDetails = await store.dispatch("houses/fetchHouseById", id);
-        house.value = houseDetails;
+        await housesStore.fetchHouseById(id); // Use Pinia action
+        house.value = housesStore.house; // Access the house directly from the store
       } catch (err) {
         console.error("Failed to fetch house details:", err);
       }
@@ -54,7 +53,7 @@ export default {
 
     const deleteListing = async (id) => {
       try {
-        await store.dispatch("houses/deleteHouse", id);
+        await housesStore.deleteHouse(id); // Use Pinia action
         house.value = null;
         showDeletePopup.value = false;
       } catch (err) {

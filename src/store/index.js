@@ -1,14 +1,15 @@
-import { createStore } from "vuex";
-import houses from "./houses";
-import filter from "./filter/filter";
-import navigation from "./navigation/navigation";
-import favorites from "./favorites/favorites";
+import { createPinia } from "pinia";
+import { useHousesStore } from "./houses/housesStore";
+import { useFilterStore } from "./filter/filterStore";
+import { useNavigationStore } from "./navigation/navigationStore";
+import { useFavoritesStore } from "./favorites/favoritesStore";
 
-export default createStore({
-  modules: {
-    houses,
-    filter,
-    navigation,
-    favorites,
-  },
-});
+const pinia = createPinia();
+
+export {
+  pinia,
+  useHousesStore,
+  useFilterStore,
+  useNavigationStore,
+  useFavoritesStore,
+};

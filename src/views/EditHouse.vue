@@ -13,24 +13,25 @@
 <script>
 import GoBackButton from "@/components/Layouts/UI/GoBackButton.vue";
 import ListingForm from "@/components/Layouts/Shared/ListingForm.vue";
-import { useStore } from "vuex";
+import { useHousesStore } from "@/stores/housesStore"; // Import Pinia store
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
+
 export default {
   components: {
     ListingForm,
     GoBackButton,
   },
   setup() {
-    const store = useStore();
+    const housesStore = useHousesStore(); // Use Pinia store
     const route = useRoute();
     const existingListing = ref(null);
 
     const fetchListing = async () => {
       try {
         const listingId = route.params.id;
-        const house = await store.dispatch("houses/fetchHouseById", listingId);
-        existingListing.value = house;
+        await housesStore.fetchHouseById(listingId); // Use Pinia action
+        existingListing.value = housesStore.house; // Access house directly from the store
       } catch (err) {
         console.error("Failed to fetch listing:", err);
       }
