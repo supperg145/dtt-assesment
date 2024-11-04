@@ -1,56 +1,47 @@
-// Color Palette
-$color-primary: #eb5440; // Main brand color
-$color-secondary: #4a4b4c; // Secondary color for accents and text
-$color-tertiary-light: #e8e8e8; // Light gray for backgrounds or borders
-$color-tertiary-dark: #c3c3c3; // Dark gray for borders or text
-$color-background-1: #f6f6f6; // Background color for main areas
-$color-background-2: #ffffff; // White background for sections or cards
+// Colors
+$color-primary: #eb5440;
+$color-secondary: #4a4b4c;
+$color-tertiary-light: #e8e8e8;
+$color-tertiary-dark: #c3c3c3;
+$color-background-1: #f6f6f6;
+$color-background-2: #ffffff;
 
-// Text Colors
-$text-color-primary: #000000; // Main text color
-$text-color-secondary: #4a4b4c; // Secondary text color
-$text-color-link: #067bc2; // Link text color
+$text-color-primary: #000000;
+$text-color-secondary: #4a4b4c;
+$text-color-link: #067bc2;
 
-// Font Families
-$font-family-montserrat: "Montserrat", sans-serif; // Primary font for headers and important text
-$font-family-open-sans: "Open Sans", sans-serif; // Secondary font for body text and other content
+// Fonts
+$font-family-montserrat: "Montserrat", sans-serif;
+$font-family-open-sans: "Open Sans", sans-serif;
 
-// Font Weights
-$font-weight-bold: 700; // Font weight for bold text
-$font-weight-semibold: 600; // Font weight for semi-bold text
-$font-weight-medium: 500; // Font weight for medium text
-$font-weight-regular: 400; // Font weight for regular text
+$font-weight-bold: 700;
+$font-weight-semibold: 600;
+$font-weight-medium: 500;
+$font-weight-regular: 400;
 
 // Font Sizes
-// Header Sizes
-$font-size-header1-desktop: 32px; // Font size for main headers (desktop)
-$font-size-header1-mobile: 18px; // Font size for main headers (mobile)
-$font-size-header2-desktop: 22px; // Font size for secondary headers (desktop)
-$font-size-header2-mobile: 14px; // Font size for secondary headers (mobile)
+$font-size-header1-desktop: 32px;
+$font-size-header1-mobile: 18px;
+$font-size-header2-desktop: 22px;
+$font-size-header2-mobile: 14px;
 
-// Menu and Tabs
-$font-size-header-active-menu-desktop: 19px; // Font size for active menu items (desktop)
-$font-size-buttons-tabs-desktop: 19px; // Font size for buttons and tabs (desktop)
-$font-size-buttons-tabs-mobile: 12px; // Font size for buttons and tabs (mobile)
+$font-size-active-menu: 19px;
+$font-size-buttons-desktop: 19px;
+$font-size-buttons-mobile: 12px;
 
-// Input Fields and Buttons
-$font-size-back-button-desktop: 16px; // Font size for back button (desktop)
-$font-size-input-field-title-desktop: 14px; // Font size for input field titles (desktop)
-$font-size-input-field-title-mobile: 12px; // Font size for input field titles (mobile)
+$font-size-back-button: 16px;
+$font-size-input-title-desktop: 14px;
+$font-size-input-title-mobile: 12px;
 
-// State Messages and Errors
-$font-size-header-inactive-menu-desktop: 18px; // Font size for inactive menu items (desktop)
-$font-size-empty-state-message-desktop: 18px; // Font size for empty state messages (desktop)
-$font-size-empty-state-message-mobile: 14px; // Font size for empty state messages (mobile)
-$font-size-error-message-desktop: 14px; // Font size for error messages (desktop)
-$font-size-error-message-mobile: 12px; // Font size for error messages (mobile)
+$font-size-empty-state-desktop: 18px;
+$font-size-empty-state-mobile: 14px;
+$font-size-error-desktop: 14px;
+$font-size-error-mobile: 12px;
 
-// Listing Info and Body Text
-$font-size-listing-info-desktop: 16px; // Font size for listing info (desktop)
-$font-size-listing-info-mobile: 12px; // Font size for listing info (mobile)
-$font-size-body-text-desktop: 18px; // Font size for body text (desktop)
-$font-size-body-text-mobile: 12px; // Font size for body text (mobile)
+$font-size-listing-info-desktop: 16px;
+$font-size-listing-info-mobile: 12px;
+$font-size-body-desktop: 18px;
+$font-size-body-mobile: 12px;
 
-// Input Fields
-$font-size-input-field-desktop: 14px; // Font size for input fields (desktop)
-$font-size-input-field-mobile: 12px; // Font size for input fields (mobile)
+$font-size-input-desktop: 14px;
+$font-size-input-mobile: 12px;

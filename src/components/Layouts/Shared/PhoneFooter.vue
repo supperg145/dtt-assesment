@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import homeIcon from "@/assets/slices/ic_mobile_navigarion_home@3x.png";
 import homeActiveIcon from "@/assets/slices/ic_mobile_navigarion_home_active@3x.png";
 import aboutIcon from "@/assets/slices/ic_mobile_navigarion_info@3x.png";
@@ -19,14 +21,29 @@ import aboutActiveIcon from "@/assets/slices/ic_mobile_navigarion_info_active@3x
 
 export default {
   name: "PhoneFooter",
-  computed: {
-    isHomeActive() {
-      return this.$route.path === "/";
-    },
-    isAboutActive() {
-      return this.$route.path === "/about";
-    },
+  setup() {
+    const route = useRoute();
+
+    // Reactive icon references
+    const icons = {
+      homeIcon,
+      homeActiveIcon,
+      aboutIcon,
+      aboutActiveIcon,
+    };
+
+    // Computed properties to determine active states
+    const isHomeActive = computed(() => route.path === "/");
+    const isAboutActive = computed(() => route.path === "/about");
+
+    return {
+      ...icons,
+      isHomeActive,
+      isAboutActive,
+    };
   },
+};
+</script>
   data() {
     return {
       homeIcon,

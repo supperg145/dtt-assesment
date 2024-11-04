@@ -7,7 +7,6 @@
       placeholder="Enter the street name"
       :hasError="!formData.streetName && globalError"
     />
-
     <div class="address">
       <NumberInput
         id="house-number"
@@ -23,7 +22,6 @@
         placeholder="e.g. A"
       />
     </div>
-
     <TextInput
       id="zip"
       label="Postal code"
@@ -44,7 +42,6 @@
       @file-selected="onImageChange"
       :imageSrc="require('../../../assets/slices/ic_upload@3x.png')"
     />
-
     <TextInput
       id="price"
       label="Price"
@@ -52,7 +49,6 @@
       placeholder="e.g. €1000"
       :hasError="!formData.price && globalError"
     />
-
     <div class="form-grid">
       <NumberInput
         id="size"
@@ -82,7 +78,6 @@
         :hasError="!formData.bathrooms && globalError"
       />
     </div>
-
     <NumberInput
       id="constructionYear"
       label="Construction year"
@@ -90,7 +85,6 @@
       placeholder="e.g. 1990"
       :hasError="!formData.constructionYear && globalError"
     />
-
     <TextArea
       id="description"
       label="Description"
@@ -98,17 +92,13 @@
       placeholder="Enter description"
       :hasError="!formData.description && globalError"
     />
-
     <ErrorDisplay :error="globalError" />
-
-    <FancyButton :disabled="!isFormValid" buttonType="submit"
-      >Submit</FancyButton
-    >
+    <FancyButton :disabled="!isFormValid" buttonType="submit">Submit</FancyButton>
   </form>
 </template>
 
 <script>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useFormValidation } from "@/composables/useFormValidation";
 import FancyButton from "../../../components/Layouts/UI/FancyButton.vue";
@@ -118,11 +108,7 @@ import FileUpload from "./Listing/FileUpload.vue";
 import SelectInput from "./Listing/SelectInput.vue";
 import TextArea from "./Listing/TextArea.vue";
 import ErrorDisplay from "./Listing/ErrorDisplay.vue";
-import {
-  createListing,
-  updateListing,
-  uploadImage,
-} from "@/services/apiService";
+import { createListing, updateListing, uploadImage } from "@/services/apiService";
 
 export default {
   name: "ListingForm",
@@ -161,6 +147,10 @@ export default {
       description: "",
     });
 
+    const globalError = ref(null);
+    const apiKey = process.env.VUE_APP_API_KEY;
+
+    // Initialize form data if listingData is provided
     watch(
       () => props.listingData,
       (newData) => {
@@ -185,25 +175,19 @@ export default {
       { immediate: true }
     );
 
-    const globalError = ref(null);
+    // Form validation
     const { isFormValid } = useFormValidation(formData);
-    const apiKey = process.env.VUE_APP_API_KEY;
 
+    // Submit form data
     const onSubmit = async () => {
       if (isFormValid.value) {
         try {
           let response;
           const formDataToSend = new FormData();
-          Object.keys(formData).forEach((key) =>
-            formDataToSend.append(key, formData[key])
-          );
+          Object.keys(formData).forEach((key) => formDataToSend.append(key, formData[key]));
 
           if (isEditMode.value) {
-            response = await updateListing(
-              props.listingData.id,
-              formDataToSend,
-              apiKey
-            );
+            response = await updateListing(props.listingData.id, formDataToSend, apiKey);
           } else {
             response = await createListing(formDataToSend, apiKey);
           }
@@ -212,11 +196,7 @@ export default {
 
           if (createdListingId) {
             if (formData.image) {
-              const imageUploadResponse = await uploadImage(
-                createdListingId,
-                formData.image,
-                apiKey
-              );
+              const imageUploadResponse = await uploadImage(createdListingId, formData.image, apiKey);
               if (!imageUploadResponse.ok) {
                 throw new Error("Image upload failed");
               }
@@ -228,9 +208,7 @@ export default {
         } catch (error) {
           console.error("Failed to create/update house:", error);
           globalError.value = error.response
-            ? `Failed to create/update house: ${
-                error.response.status
-              }, Details: ${JSON.stringify(error.response.data)}`
+            ? `Failed to create/update house: ${error.response.status}, Details: ${JSON.stringify(error.response.data)}`
             : `Failed to create/update house: ${error.message}`;
         }
       } else {

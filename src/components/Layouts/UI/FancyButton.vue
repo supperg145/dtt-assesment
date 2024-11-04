@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useMobileDetection } from "@/composables/useMobileDetection";
 import { useRouter } from "vue-router";
 
@@ -61,24 +62,23 @@ export default {
       }
     };
 
+    const buttonClass = computed(() => ({
+      "button-primary": props.type === "primary",
+      "button-secondary": props.type === "secondary",
+      "button-disabled": props.disabled,
+      "button-mobile": isMobile.value,
+      "is-create-button": props.isCreateButton,
+    }));
+
     return {
       isMobile,
       handleClick,
+      buttonClass,
     };
-  },
-  computed: {
-    buttonClass() {
-      return {
-        "button-primary": this.type === "primary",
-        "button-secondary": this.type === "secondary",
-        "button-disabled": this.disabled,
-        "button-mobile": this.isMobile,
-        "is-create-button": this.isCreateButton,
-      };
-    },
   },
 };
 </script>
+
 
 <style lang="scss" scoped>
 @import "../../../assets/scss/_variables.scss";

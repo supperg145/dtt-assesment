@@ -15,17 +15,21 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "ToggleButton",
-  data() {
-    return {
-      isPrice: true, // Default value
+  setup(props, { emit }) {
+    const isPrice = ref(true); // Default value
+
+    const handleChange = () => {
+      emit("filter-changed", isPrice.value ? "price" : "size");
     };
-  },
-  methods: {
-    handleChange() {
-      this.$emit("filter-changed", this.isPrice ? "price" : "size");
-    },
+
+    return {
+      isPrice,
+      handleChange,
+    };
   },
 };
 </script>

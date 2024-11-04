@@ -1,22 +1,24 @@
 <template>
   <div class="popup-overlay" v-if="isVisible">
     <div class="popup-content">
-      <h1>Delete lisintg</h1>
+      <h1>Delete Listing</h1>
       <p>Are you sure you want to delete this listing?</p>
       <p>This action cannot be undone</p>
       <div class="popup-actions">
         <FancyButton @click.stop="confirm">YES DELETE</FancyButton>
-        <FancyButton @click.stop="cancel" :class="'button-secondary'"
-          >GO BACK</FancyButton
-        >
+        <FancyButton @click.stop="cancel" class="button-secondary">
+          GO BACK
+        </FancyButton>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { defineComponent, toRefs } from "vue";
 import FancyButton from "./Layouts/UI/FancyButton.vue";
-export default {
+
+export default defineComponent({
   name: "DeleteConfirmationPopup",
   components: {
     FancyButton,
@@ -28,15 +30,24 @@ export default {
     },
   },
   emits: ["confirm", "cancel"],
-  methods: {
-    confirm() {
-      this.$emit("confirm");
-    },
-    cancel() {
-      this.$emit("cancel");
-    },
+  setup(props, { emit }) {
+    const { isVisible } = toRefs(props);
+
+    const confirm = () => {
+      emit("confirm");
+    };
+
+    const cancel = () => {
+      emit("cancel");
+    };
+
+    return {
+      isVisible,
+      confirm,
+      cancel,
+    };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

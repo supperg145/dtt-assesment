@@ -14,7 +14,7 @@ export const usePreviousPathStore = defineStore("previousPath", {
   // Actions
   actions: {
     updatePreviousPath(path) {
-      this.previousPath = path; // Directly setting state
+      this.previousPath = path;
     },
   },
 });

@@ -18,21 +18,27 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "SearchField",
-  data() {
-    return {
-      searchQuery: "",
+  setup(props, { emit }) {
+    const searchQuery = ref(""); // Reactive state for search query
+
+    const handleInput = () => {
+      emit("search", searchQuery.value); // Emit search query on input
     };
-  },
-  methods: {
-    handleInput() {
-      this.$emit("search", this.searchQuery);
-    },
-    clearSearch() {
-      this.searchQuery = ""; // Clear the search query
-      this.$emit("search", ""); // Emit empty search term to reset filter
-    },
+
+    const clearSearch = () => {
+      searchQuery.value = ""; // Clear the search query
+      emit("search", ""); // Emit empty search term to reset filter
+    };
+
+    return {
+      searchQuery,
+      handleInput,
+      clearSearch,
+    };
   },
 };
 </script>
