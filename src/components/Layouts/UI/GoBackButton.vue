@@ -28,7 +28,7 @@ export default {
         case "About":
           return "Back to About";
         case "House":
-          return "Back to Home";
+          return "Back to House Overview";
         case "Create":
           return "Back to Home";
         case "Edit":
@@ -39,7 +39,11 @@ export default {
     });
 
     const goBack = () => {
-      router.back();
+      if (route.name === "House") {
+        router.push({ name: "Home" });
+      } else {
+        router.back();
+      }
     };
 
     return { goBack, buttonText };

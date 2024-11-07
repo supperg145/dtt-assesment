@@ -104,14 +104,19 @@ export default {
   .houseimage {
     flex-shrink: 0;
     width: 200px;
-    height: 100%;
+    /* Set aspect ratio to maintain 4:3, adjust as needed */
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     border-radius: 4px;
+    position: relative; // Added to position the img correctly
 
     img {
       width: 100%;
-      height: auto;
-      object-fit: cover;
+      height: 100%;
+      object-fit: cover; // Ensures the image covers the entire container
+      position: absolute; // Make image fill the container
+      top: 0;
+      left: 0;
     }
   }
 

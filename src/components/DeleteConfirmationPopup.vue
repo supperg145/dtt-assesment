@@ -51,6 +51,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/_variables.scss";
 .popup-overlay {
   position: fixed;
   top: 0;

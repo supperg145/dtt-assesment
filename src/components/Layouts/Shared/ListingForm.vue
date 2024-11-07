@@ -36,12 +36,15 @@
       placeholder="e.g. Amsterdam"
       :hasError="!formData.city && globalError"
     />
+
+    <!-- Image Upload and Preview -->
     <FileUpload
       id="image"
       label="Upload a picture (PNG or JPG)"
       @file-selected="onImageChange"
-      :imageSrc="require('../../../assets/slices/ic_upload@3x.png')"
+      :imageSrc="formData.imagePreview"
     />
+
     <TextInput
       id="price"
       label="Price"
@@ -93,12 +96,12 @@
       :hasError="!formData.description && globalError"
     />
     <ErrorDisplay :error="globalError" />
-    <FancyButton :disabled="!isFormValid" buttonType="submit">Submit</FancyButton>
+    <FancyButton :disabled="!isFormValid" buttonType="submit" class="button">Submit</FancyButton>
   </form>
 </template>
 
 <script>
-import { ref, reactive, watch, computed } from "vue";
+import { ref, reactive, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useFormValidation } from "@/composables/useFormValidation";
 import FancyButton from "../../../components/Layouts/UI/FancyButton.vue";
@@ -109,6 +112,7 @@ import SelectInput from "./Listing/SelectInput.vue";
 import TextArea from "./Listing/TextArea.vue";
 import ErrorDisplay from "./Listing/ErrorDisplay.vue";
 import { createListing, updateListing, uploadImage } from "@/services/apiService";
+import uploadIcon from "../../../assets/slices/ic_upload@3x.png";
 
 export default {
   name: "ListingForm",
@@ -130,7 +134,6 @@ export default {
   setup(props) {
     const router = useRouter();
     const isEditMode = ref(false);
-
     const formData = reactive({
       streetName: "",
       houseNumber: "",
@@ -138,6 +141,7 @@ export default {
       zip: "",
       city: "",
       image: null,
+      imagePreview: "", // To hold the preview of the uploaded image
       price: "",
       size: "",
       hasGarage: false,
@@ -146,9 +150,8 @@ export default {
       constructionYear: "",
       description: "",
     });
-
     const globalError = ref(null);
-    const apiKey = process.env.VUE_APP_API_KEY;
+    const apiKey = import.meta.env.VITE_APP_API_KEY;
 
     // Initialize form data if listingData is provided
     watch(
@@ -169,6 +172,7 @@ export default {
             bathrooms: newData.rooms?.bathrooms || "",
             constructionYear: newData.constructionYear || "",
             description: newData.description || "",
+            imagePreview: newData.image || "", // Set the image preview from existing data
           });
         }
       },
@@ -218,6 +222,8 @@ export default {
 
     const onImageChange = (file) => {
       formData.image = file;
+      // Create a URL for the uploaded image to display as a preview
+      formData.imagePreview = URL.createObjectURL(file); // Use the URL.createObjectURL to show the image preview
     };
 
     return {
@@ -226,6 +232,7 @@ export default {
       isFormValid,
       onSubmit,
       onImageChange,
+      uploadIcon,
     };
   },
 };
@@ -249,5 +256,18 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+}
+
+.button {
+  margin-bottom: 20px;
+}
+
+.image-preview {
+  margin-top: 16px; /* Add margin for separation */
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px; /* Optional: to match your design */
+  }
 }
 </style>

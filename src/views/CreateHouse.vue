@@ -34,6 +34,7 @@ export default {
   justify-content: left;
   align-items: left;
   box-sizing: border-box;
+  padding: 0 10px;
 
   .form-container {
     max-width: 600px;

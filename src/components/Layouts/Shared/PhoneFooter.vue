@@ -24,38 +24,24 @@ export default {
   setup() {
     const route = useRoute();
 
-    // Reactive icon references
-    const icons = {
-      homeIcon,
-      homeActiveIcon,
-      aboutIcon,
-      aboutActiveIcon,
-    };
-
     // Computed properties to determine active states
     const isHomeActive = computed(() => route.path === "/");
     const isAboutActive = computed(() => route.path === "/about");
 
     return {
-      ...icons,
+      homeIcon,
+      homeActiveIcon,
+      aboutIcon,
+      aboutActiveIcon,
       isHomeActive,
       isAboutActive,
     };
   },
 };
 </script>
-  data() {
-    return {
-      homeIcon,
-      homeActiveIcon,
-      aboutIcon,
-      aboutActiveIcon,
-    };
-  },
-};
-</script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/_variables.scss";
 .phone-footer {
   position: fixed;
   bottom: 0;

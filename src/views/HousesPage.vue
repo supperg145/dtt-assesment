@@ -37,6 +37,9 @@ export default {
 
 // Media query for mobile devices
 @media (max-width: 480px) {
+  *{
+    padding: 0 10px;
+  }
   .pageheader {
     flex-direction: row;
     margin: 16px 0;

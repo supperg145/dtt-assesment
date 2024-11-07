@@ -13,39 +13,61 @@ const routes = [
     path: "/",
     name: "Home",
     component: HomePage,
+    meta: {
+      title: "Home",
+    }
   },
   {
     path: "/about",
     name: "About",
     component: AboutPage,
+    meta: {
+      title: "About",
+    },
   },
   {
     path: "/house/:id",
     name: "House",
     component: HouseDetail,
     props: true,
+    meta: {
+      title: "Details",
+    },
   },
   {
     path: "/create",
     name: "Create",
     component: CreateHouse,
+    meta: {
+      title: "Create",
+    },
   },
   {
     path: "/house/edit/:id",
     name: "Edit",
     component: EditHouse,
     props: true,
+    meta: {
+      title: "Edit",
+    },
   },
   {
     path: "/:catchAll(.*)*",
     name: "NotFound",
     component: NotFound,
+    meta: {
+      title: "404 - Page Not Found",
+    },
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.VITE_APP_API_URL),
   routes,
+});
+
+router.afterEach((to) => {
+  document.title = to.meta.title || "House App";
 });
 
 router.beforeEach((to, from, next) => {

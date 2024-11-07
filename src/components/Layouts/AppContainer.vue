@@ -23,7 +23,7 @@ export default {
   @media (max-width: 480px) {
     display: flex;
     flex-direction: column;
-    padding: 0 15px;
+    padding: 0 0px;
     margin-bottom: 50px;
   }
 }

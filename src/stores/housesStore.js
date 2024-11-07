@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-const baseUrl = process.env.VITE_APP_API_URL;
-const apiKey = process.env.VITE_APP_API_KEY;
+const baseUrl = import.meta.env.VITE_APP_API_URL;
+const apiKey = import.meta.env.VITE_APP_API_KEY;
 
 export const useHousesStore = defineStore("houses", {
   // State

@@ -60,6 +60,7 @@ export default {
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
+  padding: 0 10px;
 
   .form-container {
     padding: 20px;

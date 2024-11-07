@@ -1,4 +1,0 @@
-export default {
-  houses: [],
-  house: {},
-};

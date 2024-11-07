@@ -1,7 +1,9 @@
 <template>
   <div class="navbar header">
     <nav class="container">
-      <img src="../assets/slices/img_logo_dtt@3x.png" alt="logo" />
+      <router-link to="/">
+        <img src="../assets/slices/img_logo_dtt@3x.png" alt="logo" />
+      </router-link>
       <router-link to="/" class="nav-link" active-class="nav-link-active">
         Houses
       </router-link>
